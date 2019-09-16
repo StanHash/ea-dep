@@ -45,8 +45,8 @@ fs::path& normalize(fs::path& p)
 {
 	fs::path::size_type idx = 0;
 
-	while ((idx = p.find('\\', idx) != fs::path::npos))
-		p[idx] = '/';
+    while ((idx = p.find('\\', idx)) != fs::path::npos)
+        p[idx] = '/';
 
 	return p;
 }
