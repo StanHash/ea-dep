@@ -9,7 +9,7 @@
 namespace fs { using path = std::string; }
 
 inline
-std::string file_read_content(const std::string& filename)
+std::string file_read_content(const fs::path& filename)
 {
 	std::ifstream in(filename, std::ios::in | std::ios::binary);
 
