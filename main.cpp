@@ -14,7 +14,7 @@ struct Config
 {
 	std::vector<std::string> externalPaths;
 	bool addExternalFiles = false;
-	bool addMissingFiles = true;
+	bool addMissingFiles = false;
 };
 
 template<typename ActionFunc>
