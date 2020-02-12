@@ -35,6 +35,10 @@ void handle_fileexpr(FileList& filelist, const std::string& wd, const std::strin
 		return;
 	}
 
+	// End here if neither option is set (small optimization)
+	if (!config.addMissingFiles && !config.addExternalFiles)
+		return;
+
 	// Check external files
 
 	for (auto& path : config.externalPaths)
