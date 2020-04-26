@@ -17,7 +17,7 @@ std::string file_read_content(const fs::path& filename)
 	{
 		std::ostringstream contents;
 
-		contents << in.rdbuf();
+		contents << in.rdbuf() << "\n";
 		in.close();
 
 		return contents.str();

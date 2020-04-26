@@ -60,7 +60,7 @@ Includes parse_includes(const std::string& fileContents)
 			*   { return {}; }
 			end { return {}; }
 
-			string = '"' .* '"';
+			string = '"' [^"]* '"';
 			string { return std::string(token + 1, cursor - 1); }
 
 			naked = [^ \t\v\r\n"]+;
