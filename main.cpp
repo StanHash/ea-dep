@@ -8,7 +8,22 @@
 
 #include <unordered_set>
 
-using FileList = std::unordered_set<std::string>;
+struct FileList
+{
+	bool has_file(const std::string& file)
+	{
+		return files.count(file);
+	}
+
+	void add_file(const std::string& file)
+	{
+		files.insert(file);
+		orderedFiles.push_back(file);
+	}
+
+	std::unordered_set<std::string> files;
+	std::vector<std::string> orderedFiles;
+};
 
 struct Config
 {
@@ -24,12 +39,12 @@ void handle_fileexpr(FileList& filelist, const std::string& wd, const std::strin
 
 	const auto locfile = combine_path(wd, fileexpr);
 
-	if (filelist.count(locfile))
+	if (filelist.has_file(locfile))
 		return;
 
 	if (file_exists(locfile))
 	{
-		filelist.insert(locfile);
+		filelist.add_file(locfile);
 		func(locfile);
 
 		return;
@@ -45,14 +60,14 @@ void handle_fileexpr(FileList& filelist, const std::string& wd, const std::strin
 	{
 		const auto extfile = combine_path(path, fileexpr);
 
-		if (filelist.count(extfile))
+		if (filelist.has_file(extfile))
 			return;
 
 		if (file_exists(extfile))
 		{
 			if (config.addExternalFiles)
 			{
-				filelist.insert(extfile);
+				filelist.add_file(extfile);
 				func(extfile);
 			}
 
@@ -63,7 +78,7 @@ void handle_fileexpr(FileList& filelist, const std::string& wd, const std::strin
 	// Add missing neighbor file to list if addMissingFiles enabled
 
 	if (config.addMissingFiles)
-		filelist.insert(locfile);
+		filelist.add_file(locfile);
 }
 
 void list_depends(FileList& filelist, const std::string& filename, const Config& config)
@@ -164,7 +179,7 @@ int main(int argc, char** argv)
 		return 4;
 	}
 
-	for (auto& inc : list_depends(normalized(input), config))
+	for (auto& inc : list_depends(normalized(input), config).orderedFiles)
 		std::cout << inc << std::endl;
 
 	return 0;
