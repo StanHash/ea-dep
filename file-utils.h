@@ -90,4 +90,30 @@ fs::path combine_path(const fs::path& left, const fs::path& right)
 	return result;
 }
 
+inline
+fs::path& resolve_dotdots(fs::path& p)
+{
+	// expects normalized path
+
+	fs::path::size_type beg = 0;
+	fs::path::size_type sep = 0;
+
+	while ((sep = p.find('/', beg)) != fs::path::npos)
+	{
+		int cmp = p.compare(sep + 1, 3, "../");
+
+		if (cmp == 0)
+		{
+			p.erase(beg, (sep - beg) + 4);
+
+			// rapply the algorithm recursively
+			return resolve_dotdots(p);
+		}
+
+		beg = sep + 1;
+	}
+
+	return p;
+}
+
 #endif // FILE_UTILS_INCLUDED

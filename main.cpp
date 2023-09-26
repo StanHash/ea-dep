@@ -37,7 +37,9 @@ void handle_fileexpr(FileList& filelist, const std::string& wd, const std::strin
 {
 	// Check neighbor file
 
-	const auto locfile = combine_path(wd, fileexpr);
+	auto locfile = combine_path(wd, fileexpr);
+
+	resolve_dotdots(locfile);
 
 	if (filelist.has_file(locfile))
 		return;
@@ -116,7 +118,8 @@ int main(int argc, char** argv)
 {
 	if (argc == 1)
 	{
-		std::cout << "Usage: " << argv[0] << " <input> [-I <path>]... [--add-missings] [--add-externals]" << std::endl;
+		std::cerr << "ea-dep 1.2 - include dependency analyzer for EA scripts" << std::endl;
+		std::cerr << "Usage: " << argv[0] << " INPUT [-I PATH]... [--add-missings] [--add-externals]" << std::endl;
 		return 0;
 	}
 
